@@ -1,4 +1,6 @@
+"use client"
 import { Star, ShoppingCart } from 'lucide-react'
+import { motion } from 'framer-motion';
 
 export default function Products() {
   const products = [
@@ -43,11 +45,54 @@ export default function Products() {
       features: ['18x44" Size', 'Foot Paddle', 'Branding Area', 'Contact-free Operation']
     }
   ]
+ const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.5
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 30 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        type: "spring", 
+        stiffness: 100,
+        damping: 10
+      }
+    }
+  };
+
 
   return (
-    <section id="products" className="py-20 px-4 bg-gray-900/30">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+   <section id="products" className="py-20 px-4 bg-gray-900/30 relative overflow-hidden">
+      {/* Floating background elements */}
+      <div className="floating-shape floating-shape--purple" 
+           style={{
+             width: '400px',
+             height: '400px',
+             top: '20%',
+             left: '-100px',
+             animation: 'floatX 15s ease-in-out infinite alternate'
+           }}></div>
+      
+      <div className="floating-shape floating-shape--pink"
+           style={{
+             width: '300px',
+             height: '300px',
+             top: '60%',
+             right: '-50px',
+             animation: 'floatY 12s ease-in-out infinite alternate'
+           }}></div>
+
+      <div className="max-w-7xl mx-auto relative">
+        <div className="text-center mb-16 animate-fade-in-up">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
             Hot Deals
           </h2>
@@ -56,9 +101,21 @@ export default function Products() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
           {products.map((product, index) => (
-            <div key={index} className="bg-black/50 border border-gray-800 rounded-2xl overflow-hidden card-hover">
+            <motion.div 
+              key={index} 
+              className="bg-black/50 border border-gray-800 rounded-2xl overflow-hidden card-hover hover-grow"
+              variants={item}
+              whileHover={{ scale: 1.03 }}
+            >
+
               <div className="relative">
                 <div className="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
                   <span className="text-gray-500 text-sm">{product.category}</span>
@@ -90,14 +147,15 @@ export default function Products() {
                   ))}
                 </ul>
                 
-                <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center space-x-2">
-                  <ShoppingCart className="w-4 h-4" />
-                  <span>Buy Now</span>
+               <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 flex items-center justify-center space-x-2 group">
+                  <ShoppingCart className="w-4 h-4 group-hover:scale-125 transition-transform" />
+                  <span className="group-hover:font-bold transition-all">Buy Now</span>
                 </button>
               </div>
-            </div>
+             
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

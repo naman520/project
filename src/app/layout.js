@@ -1,26 +1,26 @@
+"use client"
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./animations.css"
+import { usePathname } from 'next/navigation';
+import { AnimatePresence } from 'framer-motion';
+import PageTransition from './PageTransition';
+import LoadingScreen from './LoadingScreen';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata = {
-  title: 'ProSign Media - Premium Signage & Promotional Solutions',
-  description: 'Award-winning signage and promotional products company specializing in acrylic displays, digital signage, and custom branding solutions.',
-}
 
 export default function RootLayout({ children }) {
+
+  const pathname = usePathname();
+
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <LoadingScreen />
+      <AnimatePresence mode="wait">
+        <PageTransition key={pathname}>
+          {children}
+        </PageTransition>
+      </AnimatePresence>
       </body>
     </html>
   )
